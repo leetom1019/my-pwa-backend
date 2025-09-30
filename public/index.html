@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>我的 PWA 待辦清單</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="manifest" href="/manifest.json">
   <style>
     body { font-family: Arial, sans-serif; max-width: 600px; margin: 2rem auto; padding: 1rem; }
     input[type="text"] { width: 70%; padding: 0.5rem; }
@@ -64,6 +65,15 @@
         alert('連線錯誤：' + err.message);
       }
     }
+  </script>
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(reg => console.log('SW registered'))
+        .catch(err => console.log('SW registration failed', err));
+    });
+  }
   </script>
 </body>
 </html>
