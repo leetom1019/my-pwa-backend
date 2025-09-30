@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>我的 PWA 待辦清單</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: 2rem auto; padding: 1rem; }
+    input[type="text"] { width: 70%; padding: 0.5rem; }
+    button { padding: 0.5rem; }
+    ul { list-style: none; padding: 0; }
+    li { padding: 0.5rem; border-bottom: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <h1>📝 我的待辦清單</h1>
+
+  <div>
+    <input type="text" id="todoInput" placeholder="輸入待辦事項" />
+    <button onclick="addTodo()">新增</button>
+  </div>
+
+  <button onclick="loadTodos()">載入所有待辦</button>
+  <ul id="todoList"></ul>
+
+  <script>
+    const API_URL = 'https://my-pwa-backend-qkag.onrender.com/api/todos';
+
+    async function loadTodos() {
+      try {
+        const res = await fetch(API_URL);
+        const todos = await res.json();
+        const list = document.getElementById('todoList');
+        list.innerHTML = '';
+        todos.forEach(t => {
+          const li = document.createElement('li');
+          li.textContent = t.text;
+          list.appendChild(li);
+        });
+      } catch (err) {
+        alert('讀取失敗：' + err.message);
+      }
+    }
+
+    async function addTodo() {
+      const input = document.getElementById('todoInput');
+      const text = input.value.trim();
+      if (!text) return alert('請輸入內容');
+
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text })
+        });
+
+        if (res.ok) {
+          input.value = '';
+          loadTodos(); // 新增後自動刷新
+        } else {
+          alert('新增失敗');
+        }
+      } catch (err) {
+        alert('連線錯誤：' + err.message);
+      }
+    }
+  </script>
+</body>
+</html>

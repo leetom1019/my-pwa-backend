@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 3000;
 
 // 支援 JSON 請求
 app.use(express.json());
+app.use(express.static('public'));
 
 // Todo 模型（資料結構）
 const todoSchema = new mongoose.Schema({
