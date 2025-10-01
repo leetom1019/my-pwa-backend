@@ -67,7 +67,7 @@
     }
   </script>
   <script>
-  // 🔹 第一步：註冊 Service Worker（讓 PWA 功能就緒）
+  //  第一步：註冊 Service Worker（讓 PWA 功能就緒）
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/service-worker.js')
@@ -77,7 +77,7 @@
     }
   </script>
   <script>
-    // 🔹 第二步：處理安裝提示（依賴 PWA 基礎已建立）
+    // 第二步：處理安裝提示（依賴 PWA 基礎已建立）
     let deferredPrompt;
 
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -87,7 +87,7 @@
 
       // Optional: Show your own "Install App" button
       const installBtn = document.createElement('button');
-      installBtn.textContent = '安裝此應用程式';
+      installBtn.textContent = '安裝App';
       installBtn.style.marginTop = '1rem';
 
       installBtn.onclick = async () => {
