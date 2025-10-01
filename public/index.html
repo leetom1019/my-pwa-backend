@@ -67,13 +67,42 @@
     }
   </script>
   <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/service-worker.js')
-        .then(reg => console.log('SW registered'))
-        .catch(err => console.log('SW registration failed', err));
-    });
-  }
+  // 🔹 第一步：註冊 Service Worker（讓 PWA 功能就緒）
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(reg => console.log('SW registered'))
+          .catch(err => console.log('SW registration failed', err));
+      });
+    }
   </script>
+  <script>
+    // 🔹 第二步：處理安裝提示（依賴 PWA 基礎已建立）
+    let deferredPrompt;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent auto prompt
+      e.preventDefault();
+      deferredPrompt = e;
+
+      // Optional: Show your own "Install App" button
+      const installBtn = document.createElement('button');
+      installBtn.textContent = '安裝此應用程式';
+      installBtn.style.marginTop = '1rem';
+
+      installBtn.onclick = async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          if (outcome === 'accepted') {
+            console.log(' User accepted the install prompt ');
+          }
+          deferredPrompt = null;
+        }
+      };
+      document.body.appendChild(installBtn);
+    });
+  </script>
+
 </body>
 </html>
